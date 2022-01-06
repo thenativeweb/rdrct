@@ -14,7 +14,12 @@ interface RedirectStore {
     key: string;
     url: string;
     type: RedirectType;
-  }) => Promise<string>;
+  }) => Promise<void>;
+
+  edit: ({ key, url }: {
+    key: string;
+    url: string;
+  }) => Promise<void>;
 
   remove: ({ key }: {
     key: string;

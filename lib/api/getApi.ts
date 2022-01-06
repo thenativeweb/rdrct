@@ -2,6 +2,7 @@ import { addRedirect } from './addRedirect';
 import basicAuth from 'express-basic-auth';
 import { Configuration } from '../configuration/Configuration';
 import cors from 'cors';
+import { editRedirect } from './editRedirect';
 import { getRedirect } from './getRedirect';
 import { getRedirects } from './getRedirects';
 import { RedirectStore } from '../store/RedirectStore';
@@ -26,6 +27,7 @@ const getApi = function ({ configuration, redirectStore }: {
   api.use(express.json());
 
   api.post('/api/add-redirect', addRedirect({ redirectStore }));
+  api.post('/api/edit-redirect', editRedirect({ redirectStore }));
   api.post('/api/remove-redirect', removeRedirect({ redirectStore }));
   api.get('/api/redirects', getRedirects({ redirectStore }));
 

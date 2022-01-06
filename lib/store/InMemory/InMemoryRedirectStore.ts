@@ -1,4 +1,3 @@
-import crypto from 'crypto';
 import { InMemoryRedirectStoreOptions } from './InMemoryRedirectStoreOptions';
 import { Redirect } from '../../domain/Redirect';
 import { RedirectStore } from '../RedirectStore';
@@ -10,9 +9,7 @@ class InMemoryRedirectStore implements RedirectStore {
 
   // eslint-disable-next-line no-empty-pattern
   public constructor ({}: InMemoryRedirectStoreOptions) {
-    this.redirects = {
-      tnw: { id: crypto.randomUUID(), key: 'tnw', type: 'temporary', url: 'https://www.thenativeweb.io' }
-    };
+    this.redirects = {};
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -40,17 +37,25 @@ class InMemoryRedirectStore implements RedirectStore {
     key: string;
     url: string;
     type: RedirectType;
-  }): Promise<string> {
+  }): Promise<void> {
     if (this.redirects[key]) {
       throw new errors.RedirectAlreadyExists();
     }
 
-    const id = crypto.randomUUID();
-    const redirect = { id, key, url, type };
+    const redirect = { key, url, type };
 
     this.redirects[key] = redirect;
+  }
 
-    return id;
+  public async edit ({ key, url }: {
+    key: string;
+    url: string;
+  }): Promise<void> {
+    if (!this.redirects[key]) {
+      throw new errors.RedirectNotFound();
+    }
+
+    this.redirects[key]!.url = url;
   }
 
   public async remove ({ key }: {

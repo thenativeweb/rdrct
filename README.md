@@ -57,7 +57,25 @@ To add a new redirect, send a `POST` request to the `/api/add-redirect` route, a
 }
 ```
 
-If the redirect was added successfully, you get back the redirect's newly created `id`. If it already existed, you will get a `409`.
+If the redirect was added successfully, you get back a `200`. If it already existed, you will get a `409`.
+
+### Editing redirects
+
+To edit a redirect, send a `POST` request to the `/api/edit-redirect` route, and provide the new URL for the desired redirect in the request body. The request body must match the following JSON schema:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "key": { "type": "string", "minLength": 1 },
+    "url": { "type": "string", "minLength": 1, "format": "uri" }
+  },
+  "required": [ "key", "url" ],
+  "additionalProperties": false
+}
+```
+
+If the redirect was edited successfully, you get back a `200`. If it could not be found, you will get a `404`.
 
 ### Removing redirects
 

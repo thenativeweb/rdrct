@@ -24,6 +24,8 @@ interface RedirectStore {
   remove: ({ key }: {
     key: string;
   }) => Promise<void>;
+
+  destroy: () => Promise<void>;
 }
 
 export { RedirectStore };

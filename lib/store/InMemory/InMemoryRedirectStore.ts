@@ -5,7 +5,7 @@ import { RedirectType } from '../../domain/RedirectType';
 import * as errors from '../../errors';
 
 class InMemoryRedirectStore implements RedirectStore {
-  private readonly redirects: Partial<Record<string, Redirect>>;
+  private redirects: Partial<Record<string, Redirect>>;
 
   // eslint-disable-next-line no-empty-pattern
   public constructor ({}: InMemoryRedirectStoreOptions) {
@@ -66,6 +66,10 @@ class InMemoryRedirectStore implements RedirectStore {
     }
 
     Reflect.deleteProperty(this.redirects, key);
+  }
+
+  public async destroy (): Promise<void> {
+    this.redirects = {};
   }
 }
 

@@ -1,18 +1,17 @@
 import { flaschenpost } from 'flaschenpost';
 import { getApi } from '../api/getApi';
+import { getConfiguration } from '../configuration/getConfiguration';
 import http from 'http';
 import { InMemoryRedirectStore } from '../store/InMemory';
-import { processenv } from 'processenv';
 
 const logger = flaschenpost.getLogger();
+const configuration = getConfiguration();
 
 const redirectStore = new InMemoryRedirectStore({});
 
-const api = getApi({ redirectStore });
-
+const api = getApi({ configuration, redirectStore });
 const server = http.createServer(api);
-const port = processenv('PORT', 3_000);
 
-server.listen(port, (): void => {
-  logger.info('Server started.', { port });
+server.listen(configuration.api.port, (): void => {
+  logger.info('Server started.', { port: configuration.api.port });
 });

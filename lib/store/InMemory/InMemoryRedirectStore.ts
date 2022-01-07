@@ -7,9 +7,12 @@ import * as errors from '../../errors';
 class InMemoryRedirectStore implements RedirectStore {
   private redirects: Partial<Record<string, Redirect>>;
 
+  private statistics: Partial<Record<string, number[]>>;
+
   // eslint-disable-next-line no-empty-pattern
   public constructor ({}: InMemoryRedirectStoreOptions) {
     this.redirects = {};
+    this.statistics = {};
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -66,10 +69,34 @@ class InMemoryRedirectStore implements RedirectStore {
     }
 
     Reflect.deleteProperty(this.redirects, key);
+    Reflect.deleteProperty(this.statistics, key);
+  }
+
+  public async record ({ key, timestamp }: {
+    key: string;
+    timestamp: number;
+  }): Promise<void> {
+    this.statistics[key] ??= [];
+    this.statistics[key]!.push(timestamp);
+  }
+
+  public async getStatisticsFor ({ key, from, to }: {
+    key: string;
+    from: number;
+    to: number;
+  }): Promise<number[]> {
+    if (!this.statistics[key]) {
+      return [];
+    }
+
+    return this.statistics[key]!.filter(
+      (timestamp): boolean => from <= timestamp && timestamp <= to
+    );
   }
 
   public async destroy (): Promise<void> {
     this.redirects = {};
+    this.statistics = {};
   }
 }
 

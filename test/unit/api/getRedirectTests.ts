@@ -46,4 +46,28 @@ suite('getRedirect', (): void => {
 
     assert.that(statusCode).is.equalTo(404);
   });
+
+  test('records the redirect for statistics.', async (): Promise<void> => {
+    await redirectStore.add({
+      key: 'tnw',
+      url: 'https://www.thenativeweb.io',
+      type: 'temporary'
+    });
+
+    const api = getApi({ configuration, redirectStore });
+    const from = Date.now();
+
+    await supertest(api).get('/tnw');
+
+    const to = Date.now();
+    const statistics = await redirectStore.getStatisticsFor({
+      key: 'tnw',
+      from,
+      to
+    });
+
+    assert.that(statistics.length).is.equalTo(1);
+    assert.that(statistics[0]).is.atLeast(from);
+    assert.that(statistics[0]).is.atMost(to);
+  });
 });

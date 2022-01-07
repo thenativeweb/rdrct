@@ -80,4 +80,42 @@ suite('removeRedirect', (): void => {
 
     assert.that(statusCode).is.equalTo(404);
   });
+
+  test('removes the statistics for the redirect as well.', async (): Promise<void> => {
+    const api = getApi({ configuration, redirectStore });
+
+    await supertest(api).
+      post('/api/add-redirect').
+      auth(
+        configuration.api.credentials.username,
+        configuration.api.credentials.password
+      ).
+      set('content-type', 'application/json').
+      send({
+        key: 'tnw',
+        url: 'https://www.thenativeweb.io',
+        type: 'temporary'
+      });
+
+    await supertest(api).get('/tnw');
+    await supertest(api).get('/tnw');
+    await supertest(api).get('/tnw');
+
+    await supertest(api).
+      post('/api/remove-redirect').
+      auth(
+        configuration.api.credentials.username,
+        configuration.api.credentials.password
+      ).
+      set('content-type', 'application/json').
+      send({ key: 'tnw' });
+
+    const statistics = await redirectStore.getStatisticsFor({
+      key: 'tnw',
+      from: 0,
+      to: Number.MAX_SAFE_INTEGER
+    });
+
+    assert.that(statistics).is.equalTo([]);
+  });
 });

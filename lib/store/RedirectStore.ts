@@ -25,6 +25,17 @@ interface RedirectStore {
     key: string;
   }) => Promise<void>;
 
+  record: ({ key, timestamp }: {
+    key: string;
+    timestamp: number;
+  }) => Promise<void>;
+
+  getStatisticsFor: ({ key, from, to }: {
+    key: string;
+    from: number;
+    to: number;
+  }) => Promise<number[]>;
+
   destroy: () => Promise<void>;
 }
 

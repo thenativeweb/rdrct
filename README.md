@@ -94,6 +94,16 @@ To remove a redirect, send a `POST` request to the `/api/remove-redirect` route,
 
 If the redirect was removed successfully, you get back a `200`. If the redirect could not be found, you will get a `404`.
 
+*Please note that removing a redirect also removes all of its statistics.*
+
+### Getting statistics for a redirect
+
+To get statistics on how often a redirect has been used, send a `GET` request to the `/api/statistics/<key>` route and replace `<key>` with the key of the desired redirect.
+
+Maybe you do not want to fetch all-time statistics, but only for a limited time frame. For that, you can specify an optional `from` and / or `to` parameter using the query string to hand over a timestamp.
+
+If the statistics could be fetched, you get back a `200`. If the redirect could not be found, you will get a `404`.
+
 ## Running quality assurance
 
 To run quality assurance for this module use [roboter](https://www.npmjs.com/package/roboter):

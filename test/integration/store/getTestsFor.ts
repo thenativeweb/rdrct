@@ -139,6 +139,70 @@ const getTestsFor = function ({ createRedirectStore }: {
       ]);
     });
   });
+
+  suite('record', (): void => {
+    test('records that a redirect has taken place.', async (): Promise<void> => {
+      const timestamp = Date.now();
+
+      await redirectStore.record({ key: 'tnw', timestamp });
+
+      const statistics = await redirectStore.getStatisticsFor({
+        key: 'tnw',
+        from: 0,
+        to: Number.MAX_SAFE_INTEGER
+      });
+
+      assert.that(statistics).is.equalTo([
+        timestamp
+      ]);
+    });
+  });
+
+  suite('getStatisticsFor', (): void => {
+    test('returns the timestamps of the redirects that have taken place.', async (): Promise<void> => {
+      const timestamp = Date.now();
+
+      await redirectStore.record({ key: 'tnw', timestamp });
+
+      const statistics = await redirectStore.getStatisticsFor({
+        key: 'tnw',
+        from: 0,
+        to: Number.MAX_SAFE_INTEGER
+      });
+
+      assert.that(statistics).is.equalTo([
+        timestamp
+      ]);
+    });
+
+    test('returns an empty list if no redirects have taken place.', async (): Promise<void> => {
+      const statistics = await redirectStore.getStatisticsFor({
+        key: 'tnw',
+        from: 0,
+        to: Number.MAX_SAFE_INTEGER
+      });
+
+      assert.that(statistics).is.equalTo([]);
+    });
+
+    test('returns the timestamps of the redirects that have taken place in the given interval.', async (): Promise<void> => {
+      const timestamp = Date.now();
+
+      await redirectStore.record({ key: 'tnw', timestamp: timestamp - 1_000 });
+      await redirectStore.record({ key: 'tnw', timestamp });
+      await redirectStore.record({ key: 'tnw', timestamp: timestamp + 1_000 });
+
+      const statistics = await redirectStore.getStatisticsFor({
+        key: 'tnw',
+        from: timestamp - 500,
+        to: timestamp + 500
+      });
+
+      assert.that(statistics).is.equalTo([
+        timestamp
+      ]);
+    });
+  });
 };
 
 // eslint-disable-next-line mocha/no-exports

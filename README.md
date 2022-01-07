@@ -18,6 +18,7 @@ $ docker run \
     -p 3000:3000 \
     -e API_USERNAME=<username> \
     -e API_PASSWORD=<password> \
+    --init \
     --name rdrct \
     rdrct
 ```

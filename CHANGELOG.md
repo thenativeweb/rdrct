@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/thenativeweb/rdrct/compare/1.0.1...1.0.2) (2022-02-07)
+
+
+### Bug Fixes
+
+* bump validate-value from 9.2.0 to 9.2.2 ([#15](https://github.com/thenativeweb/rdrct/issues/15)) ([c166477](https://github.com/thenativeweb/rdrct/commit/c166477d970b5e46538b669dcf14c4f3104958a8))
+
 ## [1.0.1](https://github.com/thenativeweb/rdrct/compare/1.0.0...1.0.1) (2022-01-25)
 
 

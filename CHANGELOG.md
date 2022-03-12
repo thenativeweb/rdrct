@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/thenativeweb/rdrct/compare/1.0.2...1.1.0) (2022-03-12)
+
+
+### Features
+
+* Add statistics route for all urls. ([#20](https://github.com/thenativeweb/rdrct/issues/20)) ([57e0ad1](https://github.com/thenativeweb/rdrct/commit/57e0ad1ee6793612d0604b7e5c6a3c284bd7c4a1))
+
 ## [1.0.2](https://github.com/thenativeweb/rdrct/compare/1.0.1...1.0.2) (2022-02-07)
 
 

@@ -5,18 +5,9 @@ import { JsonSchema, Parser } from 'validate-value';
 
 const logger = flaschenpost.getLogger();
 
-const getStatistics = function ({ redirectStore }: {
+const getStatisticsForAll = function ({ redirectStore }: {
   redirectStore: RedirectStore;
 }): RequestHandler {
-  const schemaRequestParameters: JsonSchema = {
-    type: 'object',
-    properties: {
-      key: { type: 'string', minLength: 1 }
-    },
-    required: [ 'key' ],
-    additionalProperties: false
-  };
-
   const schemaRequestQueryString: JsonSchema = {
     type: 'object',
     properties: {
@@ -27,7 +18,6 @@ const getStatistics = function ({ redirectStore }: {
     additionalProperties: false
   };
 
-  const parserRequestParameters = new Parser(schemaRequestParameters);
   const parserRequestQueryString = new Parser(schemaRequestQueryString);
 
   return async function (req, res): Promise<void> {
@@ -35,8 +25,6 @@ const getStatistics = function ({ redirectStore }: {
         to;
 
     try {
-      parserRequestParameters.parse(req.params).unwrapOrThrow();
-
       from = Number(req.query.from ?? 0);
       to = Number(req.query.to ?? Number.MAX_SAFE_INTEGER);
 
@@ -48,11 +36,10 @@ const getStatistics = function ({ redirectStore }: {
       return;
     }
 
-    const { key } = req.params;
-    const statistics = await redirectStore.getStatisticsFor({ key, from, to });
+    const statistics = await redirectStore.getStatisticsForAll({ from, to });
 
     res.json(statistics);
   };
 };
 
-export { getStatistics };
+export { getStatisticsForAll };

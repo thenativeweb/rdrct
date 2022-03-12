@@ -6,7 +6,7 @@ import { RedirectStore } from '../../../lib/store/RedirectStore';
 import { setTimeout } from 'timers/promises';
 import supertest from 'supertest';
 
-suite('getStatistics', (): void => {
+suite('getStatisticsForAll', (): void => {
   let configuration: Configuration;
   let redirectStore: RedirectStore;
 
@@ -22,7 +22,7 @@ suite('getStatistics', (): void => {
     await redirectStore.initialize();
   });
 
-  test('returns a list of timestamps for the desired redirect.', async (): Promise<void> => {
+  test('returns a list of timestamps for all redirects.', async (): Promise<void> => {
     await redirectStore.add({
       key: 'tnw',
       url: 'https://www.thenativeweb.io',
@@ -36,7 +36,7 @@ suite('getStatistics', (): void => {
     await supertest(api).get('/tnw');
 
     const { statusCode, body } = await supertest(api).
-      get('/api/statistics/tnw').
+      get('/api/statistics').
       auth(
         configuration.api.credentials.username,
         configuration.api.credentials.password
@@ -56,7 +56,7 @@ suite('getStatistics', (): void => {
     const api = getApi({ configuration, redirectStore });
 
     const { statusCode, body } = await supertest(api).
-      get('/api/statistics/tnw').
+      get('/api/statistics').
       auth(
         configuration.api.credentials.username,
         configuration.api.credentials.password
@@ -66,7 +66,7 @@ suite('getStatistics', (): void => {
     assert.that(body).is.equalTo([]);
   });
 
-  test('returns a list of timestamps for the desired redirect in the given time frame.', async (): Promise<void> => {
+  test('returns a list of timestamps for all redirects in the given time frame.', async (): Promise<void> => {
     await redirectStore.add({
       key: 'tnw',
       url: 'https://www.thenativeweb.io',
@@ -86,7 +86,7 @@ suite('getStatistics', (): void => {
     await supertest(api).get('/tnw');
 
     const { statusCode, body } = await supertest(api).
-      get('/api/statistics/tnw').
+      get('/api/statistics').
       query({
         from: Date.now() - 50,
         to: Date.now() + 50
@@ -104,7 +104,7 @@ suite('getStatistics', (): void => {
     const api = getApi({ configuration, redirectStore });
 
     const { statusCode } = await supertest(api).
-      get('/api/statistics/tnw');
+      get('/api/statistics');
 
     assert.that(statusCode).is.equalTo(401);
   });

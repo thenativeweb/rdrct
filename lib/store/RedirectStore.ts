@@ -36,6 +36,11 @@ interface RedirectStore {
     to: number;
   }) => Promise<number[]>;
 
+  getStatisticsForAll: ({ from, to }: {
+    from: number;
+    to: number;
+  }) => Promise<number[]>;
+
   destroy: () => Promise<void>;
 }
 

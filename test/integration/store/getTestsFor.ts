@@ -203,6 +203,74 @@ const getTestsFor = function ({ createRedirectStore }: {
       ]);
     });
   });
+
+  suite('getStatisticsForAll', (): void => {
+    test('returns the timestamps of the redirects that have taken place.', async (): Promise<void> => {
+      const timestamp = Date.now();
+
+      await redirectStore.record({ key: 'tnw', timestamp });
+
+      const statistics = await redirectStore.getStatisticsForAll({
+        from: 0,
+        to: Number.MAX_SAFE_INTEGER
+      });
+
+      assert.that(statistics).is.equalTo([
+        timestamp
+      ]);
+    });
+
+    test('returns an empty list if no redirects have taken place.', async (): Promise<void> => {
+      const statistics = await redirectStore.getStatisticsForAll({
+        from: 0,
+        to: Number.MAX_SAFE_INTEGER
+      });
+
+      assert.that(statistics).is.equalTo([]);
+    });
+
+    test('returns the timestamps of the redirects that have taken place in the given interval.', async (): Promise<void> => {
+      const timestamp = Date.now();
+
+      await redirectStore.record({ key: 'tnw', timestamp: timestamp - 1_000 });
+      await redirectStore.record({ key: 'tnw', timestamp });
+      await redirectStore.record({ key: 'tnw', timestamp: timestamp + 1_000 });
+
+      const statistics = await redirectStore.getStatisticsForAll({
+        from: timestamp - 500,
+        to: timestamp + 500
+      });
+
+      assert.that(statistics).is.equalTo([
+        timestamp
+      ]);
+    });
+
+    test('returns the timestamps of all redirects in order.', async (): Promise<void> => {
+      const timestamp = Date.now();
+
+      await redirectStore.record({ key: 'tnw', timestamp: timestamp - 1_000 });
+      await redirectStore.record({ key: 'tnw', timestamp });
+      await redirectStore.record({ key: 'tnw', timestamp: timestamp + 1_000 });
+      await redirectStore.record({ key: 'unleashed', timestamp: timestamp - 750 });
+      await redirectStore.record({ key: 'unleashed', timestamp: timestamp + 250 });
+      await redirectStore.record({ key: 'unleashed', timestamp: timestamp + 1_250 });
+
+      const statistics = await redirectStore.getStatisticsForAll({
+        from: 0,
+        to: Number.MAX_SAFE_INTEGER
+      });
+
+      assert.that(statistics).is.equalTo([
+        timestamp - 1_000,
+        timestamp - 750,
+        timestamp,
+        timestamp + 250,
+        timestamp + 1_000,
+        timestamp + 1_250
+      ]);
+    });
+  });
 };
 
 // eslint-disable-next-line mocha/no-exports

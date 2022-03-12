@@ -105,6 +105,14 @@ Maybe you do not want to fetch all-time statistics, but only for a limited time 
 
 If the statistics could be fetched, you get back a `200`. If the redirect could not be found, you will get a `404`.
 
+### Getting statistics for all redirects
+
+To get statistics on how often all redirects have been used, send a `GET` request to the `/api/statistics` route.
+
+Maybe you do not want to fetch all-time statistics, but only for a limited time frame. For that, you can specify an optional `from` and / or `to` parameter using the query string to hand over a timestamp.
+
+If the statistics could be fetched, you get back a `200`.
+
 ## Running quality assurance
 
 To run quality assurance for this module use [roboter](https://www.npmjs.com/package/roboter):

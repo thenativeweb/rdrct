@@ -5,7 +5,8 @@ import cors from 'cors';
 import { editRedirect } from './editRedirect';
 import { getRedirect } from './getRedirect';
 import { getRedirects } from './getRedirects';
-import { getStatistics } from './getStatistics';
+import { getStatisticsFor } from './getStatisticsFor';
+import { getStatisticsForAll } from './getStatisticsForAll';
 import { RedirectStore } from '../store/RedirectStore';
 import { removeRedirect } from './removeRedirect';
 import express, { Application } from 'express';
@@ -31,7 +32,8 @@ const getApi = function ({ configuration, redirectStore }: {
   api.post('/api/edit-redirect', editRedirect({ redirectStore }));
   api.post('/api/remove-redirect', removeRedirect({ redirectStore }));
   api.get('/api/redirects', getRedirects({ redirectStore }));
-  api.get('/api/statistics/:key', getStatistics({ redirectStore }));
+  api.get('/api/statistics', getStatisticsForAll({ redirectStore }));
+  api.get('/api/statistics/:key', getStatisticsFor({ redirectStore }));
 
   return api;
 };

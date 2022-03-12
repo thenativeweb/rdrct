@@ -94,6 +94,21 @@ class InMemoryRedirectStore implements RedirectStore {
     );
   }
 
+  public async getStatisticsForAll ({ from, to }: {
+    from: number;
+    to: number;
+  }): Promise<number[]> {
+    const statisticsForAll = [];
+
+    for (const statisticsPerKey of Object.values(this.statistics)) {
+      statisticsForAll.push(...statisticsPerKey!.filter(
+        (timestamp): boolean => from <= timestamp && timestamp <= to
+      ));
+    }
+
+    return statisticsForAll.sort((left, right): number => left - right);
+  }
+
   public async destroy (): Promise<void> {
     this.redirects = {};
     this.statistics = {};

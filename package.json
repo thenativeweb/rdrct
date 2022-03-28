@@ -19,7 +19,7 @@
     "defekt": "9.1.1",
     "express": "4.17.3",
     "express-basic-auth": "1.2.1",
-    "flaschenpost": "5.0.50",
+    "flaschenpost": "5.1.1",
     "processenv": "3.0.9",
     "validate-value": "9.2.2"
   },
